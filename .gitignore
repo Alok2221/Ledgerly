@@ -1,0 +1,21 @@
+# Ledgerly
+target/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+node_modules/
+dist/
+.angular/
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+backend/HELP.md
+
+sb4/
+sb41/
+*.zip

@@ -1,0 +1,54 @@
+---
+description: Branch naming, commit format and authorship for Ledgerly
+alwaysApply: true
+---
+
+# Branch, commit and authorship conventions
+
+Follow this repository’s history (`git log`), not generic defaults.
+Branch flow is described in `docs/BRANCHING.md`.
+
+## Branch names
+
+`feature/<short-description>` — lowercase, hyphens, **English**. Hotfixes are
+`hotfix/<description>` branched from `main`.
+
+```
+feature/invoice-list-filters
+feature/client-search
+feature/docker-compose
+```
+
+## Commits — user as sole author
+
+**Author and committer must be the repository owner only — never Cursor or
+another agent.** Do not set `--author` to Cursor, and do not add `Co-Authored-By`
+footers for an agent, Cursor, or AI model. Commits must look like the user’s
+own work in Git history.
+
+Do not change global `git config`. Use the user’s existing local identity.
+
+## Subject and body format
+
+Subject and body are **English**. No `feat:` / `fix:` / `docs:` prefixes.
+
+After a blank line, one prose paragraph: what changed and **why**, not a bullet list.
+
+```
+Add monthly filtering on the invoice list
+
+The dashboard showed every invoice at once and made monthly review hard.
+The API and Angular view now filter by period so the portfolio demo shows a
+realistic ledger workflow.
+```
+
+## Merge commits
+
+`Merge feature/<name>: <description>`, and when the merge carries a release —
+include the version in parentheses. Merging `develop` → `main` is
+`Merge develop: <summary of the whole package>`.
+
+```
+Merge feature/invoice-list-filters: status and date filters
+Merge develop: backend API, Angular UI and Docker Compose
+```

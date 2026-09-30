@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ledgerly
+      POSTGRES_USER: ledgerly
+      POSTGRES_PASSWORD: ledgerly
+    ports:
+      - "5432:5432"
+    volumes:
+      - ledgerly_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ledgerly -d ledgerly"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ledgerly
+      SPRING_DATASOURCE_USERNAME: ledgerly
+      SPRING_DATASOURCE_PASSWORD: ledgerly
+      LEDGERLY_CORS_ORIGINS: http://localhost,http://localhost:80
+      LEDGERLY_JWT_SECRET: dGVzdC1zZWNyZXQta2V5LWZvci1kZXYtb25seS1jaGFuZ2UtaW4tcHJvZC0xMjM0NTY=
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  ledgerly_pg:
