@@ -1,4 +1,4 @@
-﻿package com.ledgerly.service;
+package com.ledgerly.service;
 
 import com.ledgerly.domain.Client;
 import com.ledgerly.domain.Invoice;
