@@ -6,7 +6,7 @@ Stack: Java 21, Spring Boot 4, Angular, PostgreSQL, Docker Compose.
 
 ## What this project demonstrates
 
-- REST API with JWT — each owner sees only their own data (`userId`)
+- REST API with JWT - each owner sees only their own data (`userId`)
 - automatic invoice numbering (`FV/2026/001`) + net / VAT / gross totals
 - status workflow `DRAFT → SENT → PAID` (and `CANCELLED`)
 - one-command local run: `docker compose up --build`
@@ -69,7 +69,7 @@ UI: http://localhost:4200 (`environment.apiUrl` points at the API)
 
 ## Model
 
-`User 1—N Client`, `User 1—N Invoice`, `Invoice 1—N InvoiceItem`
+`User 1-N Client`, `User 1-N Invoice`, `Invoice 1-N InvoiceItem`
 
 ## Out of scope for MVP
 

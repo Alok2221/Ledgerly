@@ -16,7 +16,7 @@ import { AuthService } from '../../core/auth.service';
         <section class="hero">
           <p class="eyebrow">Invoice ledger for freelancers</p>
           <h1>Ledgerly</h1>
-          <p class="lede">Track clients, send invoices, and see what is still unpaid — without spreadsheet chaos.</p>
+          <p class="lede">Track clients, send invoices, and see what is still unpaid - without spreadsheet chaos.</p>
         </section>
 
         <section class="panel auth-panel">

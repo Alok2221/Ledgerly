@@ -83,9 +83,9 @@ import { Client } from '../../models/models';
             @for (row of clients; track row.id) {
               <tr>
                 <td>{{ row.name }}</td>
-                <td>{{ row.nip || '—' }}</td>
-                <td>{{ row.email || '—' }}</td>
-                <td>{{ row.phone || '—' }}</td>
+                <td>{{ row.nip || '-' }}</td>
+                <td>{{ row.email || '-' }}</td>
+                <td>{{ row.phone || '-' }}</td>
                 <td class="row-actions">
                   <button mat-button type="button" (click)="edit(row)">Edit</button>
                   <button mat-button type="button" color="warn" (click)="remove(row)">Delete</button>
@@ -103,7 +103,7 @@ import { Client } from '../../models/models';
               <div class="card-title">{{ row.name }}</div>
             </div>
             <div class="card-meta">
-              <span>NIP · {{ row.nip || '—' }}</span>
+              <span>NIP · {{ row.nip || '-' }}</span>
               <span>{{ row.email || 'No email' }}</span>
               @if (row.phone) {
                 <span>{{ row.phone }}</span>

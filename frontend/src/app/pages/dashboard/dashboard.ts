@@ -1,88 +1,113 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
 import { ApiService } from '../../core/api.service';
 import { DashboardSummary } from '../../models/models';
+import { MoneyPipe } from '../../shared/money.pipe';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatTableModule, RouterLink, CurrencyPipe, DatePipe],
+  imports: [MatButtonModule, RouterLink, MoneyPipe, DatePipe],
   template: `
-    <div class="header">
-      <div>
-        <h1>Dashboard</h1>
-        <p class="muted">Revenue summary for the current period</p>
-      </div>
-      <a mat-flat-button color="primary" routerLink="/invoices/new">New invoice</a>
-    </div>
+    <div class="page">
+      <header class="page-head">
+        <div>
+          <p class="page-kicker">This period</p>
+          <h1>Dashboard</h1>
+        </div>
+        <a mat-flat-button class="btn-accent" routerLink="/invoices/new">New invoice</a>
+      </header>
 
-    @if (summary) {
-      <div class="stats">
-        <mat-card>
-          <mat-card-subtitle>Issued</mat-card-subtitle>
-          <mat-card-title>{{ summary.issuedGross | currency: 'PLN' }}</mat-card-title>
-        </mat-card>
-        <mat-card>
-          <mat-card-subtitle>Paid</mat-card-subtitle>
-          <mat-card-title>{{ summary.paidGross | currency: 'PLN' }}</mat-card-title>
-        </mat-card>
-        <mat-card>
-          <mat-card-subtitle>Outstanding</mat-card-subtitle>
-          <mat-card-title>{{ summary.outstandingGross | currency: 'PLN' }}</mat-card-title>
-        </mat-card>
-      </div>
+      @if (summary) {
+        <div class="stats">
+          <article class="stat">
+            <span class="label">Issued</span>
+            <span class="value">{{ summary.issuedGross | money }}</span>
+          </article>
+          <article class="stat">
+            <span class="label">Paid</span>
+            <span class="value">{{ summary.paidGross | money }}</span>
+          </article>
+          <article class="stat">
+            <span class="label">Outstanding</span>
+            <span class="value">{{ summary.outstandingGross | money }}</span>
+          </article>
+        </div>
 
-      <h2>Upcoming due dates</h2>
-      @if (summary.upcomingDue.length === 0) {
-        <p class="muted">No invoices due within the next 14 days.</p>
-      } @else {
-        <table mat-table [dataSource]="summary.upcomingDue" class="full">
-          <ng-container matColumnDef="number">
-            <th mat-header-cell *matHeaderCellDef>Number</th>
-            <td mat-cell *matCellDef="let row">
-              <a [routerLink]="['/invoices', row.id]">{{ row.number }}</a>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="clientName">
-            <th mat-header-cell *matHeaderCellDef>Client</th>
-            <td mat-cell *matCellDef="let row">{{ row.clientName }}</td>
-          </ng-container>
-          <ng-container matColumnDef="dueDate">
-            <th mat-header-cell *matHeaderCellDef>Due</th>
-            <td mat-cell *matCellDef="let row">{{ row.dueDate | date: 'yyyy-MM-dd' }}</td>
-          </ng-container>
-          <ng-container matColumnDef="grossTotal">
-            <th mat-header-cell *matHeaderCellDef>Gross</th>
-            <td mat-cell *matCellDef="let row">{{ row.grossTotal | currency: 'PLN' }}</td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="cols"></tr>
-          <tr mat-row *matRowDef="let row; columns: cols"></tr>
-        </table>
+        <section>
+          <div class="section-head">
+            <p class="page-kicker">Next 14 days</p>
+            <h2 class="section-title">Due soon</h2>
+          </div>
+
+          @if (summary.upcomingDue.length === 0) {
+            <p class="muted">No sent invoices due in the next two weeks.</p>
+          } @else {
+            <div class="table-wrap desktop-only">
+              <table class="ledger-table">
+                <thead>
+                  <tr>
+                    <th>Number</th>
+                    <th>Client</th>
+                    <th>Due</th>
+                    <th>Gross</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (row of summary.upcomingDue; track row.id) {
+                    <tr>
+                      <td><a [routerLink]="['/invoices', row.id]">{{ row.number }}</a></td>
+                      <td>{{ row.clientName }}</td>
+                      <td>{{ row.dueDate | date: 'yyyy-MM-dd' }}</td>
+                      <td>{{ row.grossTotal | money }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mobile-list mobile-only">
+              @for (row of summary.upcomingDue; track row.id) {
+                <a class="mobile-card" [routerLink]="['/invoices', row.id]">
+                  <div class="card-top">
+                    <div class="card-title">{{ row.number }}</div>
+                    <strong>{{ row.grossTotal | money }}</strong>
+                  </div>
+                  <div class="card-meta">
+                    <span>{{ row.clientName }}</span>
+                    <span>Due {{ row.dueDate | date: 'yyyy-MM-dd' }}</span>
+                  </div>
+                </a>
+              }
+            </div>
+          }
+        </section>
       }
-    }
+    </div>
   `,
   styles: `
-    .header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
-    h1, h2 { margin: 0 0 0.35rem; }
-    .muted { color: color-mix(in srgb, var(--mat-sys-on-surface) 65%, transparent); margin: 0; }
-    .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 1.25rem 0 2rem; }
-    mat-card { padding: 1rem; }
-    .full { width: 100%; }
-    a { color: inherit; }
-    @media (max-width: 800px) {
-      .stats { grid-template-columns: 1fr; }
-      .header { flex-direction: column; }
+    .section-head { margin-bottom: var(--space-3); }
+    .section-title {
+      margin: 0.15rem 0 0;
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 1rem + 1vw, 1.45rem);
+      font-weight: 650;
+    }
+    .mobile-card {
+      text-decoration: none;
+      color: inherit;
+    }
+    .mobile-card strong {
+      font-family: var(--font-display);
+      color: var(--ink);
     }
   `,
 })
 export class DashboardComponent implements OnInit {
   private api = inject(ApiService);
   summary: DashboardSummary | null = null;
-  cols = ['number', 'clientName', 'dueDate', 'grossTotal'];
 
   ngOnInit(): void {
     this.api.getDashboard().subscribe((s) => (this.summary = s));

@@ -1,5 +1,5 @@
 ---
-description: Zasady pracy z gałęziami — co agent może zrobić sam, a co tylko na wyraźną prośbę
+description: Zasady pracy z gałęziami - co agent może zrobić sam, a co tylko na wyraźną prośbę
 alwaysApply: true
 ---
 
@@ -14,7 +14,7 @@ Pełne zasady projektu są w `docs/BRANCHING.md`. Ta reguła mówi tylko, czego 
 - `git push` na `origin` (jakakolwiek gałąź)
 - `git tag`
 - przepisywanie historii: `git reset --hard`, `git rebase`, `git push --force`
-- **budowanie obrazów i deploy Dockera na zdalne środowisko** — `docker build` /
+- **budowanie obrazów i deploy Dockera na zdalne środowisko** - `docker build` /
   `docker compose up --build` lokalnie do weryfikacji jest OK; push do rejestru,
   deploy na serwer albo „przy okazji, żeby było aktualne” **nie** jest prośbą.
   Gdy potrzebny deploy, **zapytaj** i poczekaj na decyzję.
@@ -30,7 +30,7 @@ Napisz, co jest gotowe i że czekasz na decyzję o scaleniu.
 
 ## Przed scaleniem (gdy już poprosi)
 
-Odpowiednie testy / build muszą przechodzić — uruchamiaj z katalogów projektu
+Odpowiednie testy / build muszą przechodzić - uruchamiaj z katalogów projektu
 (backend Java i frontend Angular), zgodnie z README.
 
 Scalenie zawsze przez `--no-ff`, żeby paczka zmian została w historii jednym punktem.

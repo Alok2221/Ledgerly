@@ -10,7 +10,7 @@ Branch flow is described in `docs/BRANCHING.md`.
 
 ## Branch names
 
-`feature/<short-description>` — lowercase, hyphens, **English**. Hotfixes are
+`feature/<short-description>` - lowercase, hyphens, **English**. Hotfixes are
 `hotfix/<description>` branched from `main`.
 
 ```
@@ -19,9 +19,9 @@ feature/client-search
 feature/docker-compose
 ```
 
-## Commits — user as sole author
+## Commits - user as sole author
 
-**Author and committer must be the repository owner only — never Cursor or
+**Author and committer must be the repository owner only - never Cursor or
 another agent.** Do not set `--author` to Cursor, and do not add `Co-Authored-By`
 footers for an agent, Cursor, or AI model. Commits must look like the user’s
 own work in Git history.
@@ -44,7 +44,7 @@ realistic ledger workflow.
 
 ## Merge commits
 
-`Merge feature/<name>: <description>`, and when the merge carries a release —
+`Merge feature/<name>: <description>`, and when the merge carries a release -
 include the version in parentheses. Merging `develop` → `main` is
 `Merge develop: <summary of the whole package>`.
 

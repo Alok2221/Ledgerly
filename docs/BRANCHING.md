@@ -67,6 +67,6 @@ Check backend (Java 21) and frontend (Angular) separately per the README.
 
 **Tags are created on `main` only, never on `develop`.**
 
-**Git history shows only you as commit author** — no Cursor and no AI `Co-Authored-By` footers.
+**Git history shows only you as commit author** - no Cursor and no AI `Co-Authored-By` footers.
 
 **Commit messages and application copy are English.**

@@ -16,7 +16,7 @@ import { AuthService } from '../../core/auth.service';
         <section class="hero">
           <p class="eyebrow">Start in a minute</p>
           <h1>Ledgerly</h1>
-          <p class="lede">One place for clients, invoice status, and monthly revenue — built for solo freelancers.</p>
+          <p class="lede">One place for clients, invoice status, and monthly revenue - built for solo freelancers.</p>
         </section>
 
         <section class="panel auth-panel">
