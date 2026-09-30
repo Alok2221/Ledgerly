@@ -6,6 +6,7 @@ target/
 .project
 .settings/
 .vscode/
+.cursor/
 node_modules/
 dist/
 .angular/
