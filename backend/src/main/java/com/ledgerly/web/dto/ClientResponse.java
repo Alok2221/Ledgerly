@@ -8,6 +8,7 @@ public record ClientResponse(
         String name,
         String nip,
         String email,
+        String phone,
         String address,
         Instant createdAt,
         Instant updatedAt) {}
