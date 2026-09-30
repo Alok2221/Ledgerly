@@ -1,14 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { ApiService } from '../../core/api.service';
 import { Client, Invoice, InvoiceStatus } from '../../models/models';
+import { MoneyPipe } from '../../shared/money.pipe';
 
 @Component({
   selector: 'app-invoices',
@@ -16,97 +18,138 @@ import { Client, Invoice, InvoiceStatus } from '../../models/models';
   imports: [
     ReactiveFormsModule,
     RouterLink,
-    MatTableModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    CurrencyPipe,
+    MatDatepickerModule,
+    MoneyPipe,
     DatePipe,
   ],
+  providers: [provideNativeDateAdapter()],
   template: `
-    <div class="header">
-      <div>
-        <h1>Invoices</h1>
-        <p class="muted">Filter by status, client and issue date</p>
+    <div class="page">
+      <header class="page-head">
+        <div>
+          <p class="page-kicker">Status workflow</p>
+          <h1>Invoices</h1>
+        </div>
+        <a mat-flat-button class="btn-accent" routerLink="/invoices/new">New invoice</a>
+      </header>
+
+      <form class="filters panel" [formGroup]="filters" (ngSubmit)="load()">
+        <mat-form-field appearance="outline" class="full-field">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="">All</mat-option>
+            <mat-option value="DRAFT">DRAFT</mat-option>
+            <mat-option value="SENT">SENT</mat-option>
+            <mat-option value="PAID">PAID</mat-option>
+            <mat-option value="CANCELLED">CANCELLED</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-field">
+          <mat-label>Client</mat-label>
+          <mat-select formControlName="clientId">
+            <mat-option value="">All</mat-option>
+            @for (c of clients; track c.id) {
+              <mat-option [value]="c.id">{{ c.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-field">
+          <mat-label>From</mat-label>
+          <input matInput [matDatepicker]="fromPicker" formControlName="from" readonly />
+          <mat-datepicker-toggle matSuffix [for]="fromPicker" aria-label="Open from date calendar"></mat-datepicker-toggle>
+          <mat-datepicker #fromPicker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-field">
+          <mat-label>To</mat-label>
+          <input matInput [matDatepicker]="toPicker" formControlName="to" readonly />
+          <mat-datepicker-toggle matSuffix [for]="toPicker" aria-label="Open to date calendar"></mat-datepicker-toggle>
+          <mat-datepicker #toPicker></mat-datepicker>
+        </mat-form-field>
+        <button mat-stroked-button type="submit" class="apply">Apply filters</button>
+      </form>
+
+      <div class="table-wrap desktop-only">
+        <table class="ledger-table">
+          <thead>
+            <tr>
+              <th>Number</th>
+              <th>Client</th>
+              <th>Status</th>
+              <th>Issued</th>
+              <th>Due</th>
+              <th>Gross</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of invoices; track row.id) {
+              <tr>
+                <td><a [routerLink]="['/invoices', row.id]">{{ row.number }}</a></td>
+                <td>{{ row.clientName }}</td>
+                <td><span class="status-chip" [class]="row.status">{{ row.status }}</span></td>
+                <td>{{ row.issueDate | date: 'yyyy-MM-dd' }}</td>
+                <td>{{ row.dueDate | date: 'yyyy-MM-dd' }}</td>
+                <td>{{ row.grossTotal | money }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
       </div>
-      <a mat-flat-button color="primary" routerLink="/invoices/new">New invoice</a>
+
+      <div class="mobile-list mobile-only">
+        @for (row of invoices; track row.id) {
+          <a class="mobile-card invoice-card" [routerLink]="['/invoices', row.id]">
+            <div class="card-top">
+              <div class="card-title">{{ row.number }}</div>
+              <span class="status-chip" [class]="row.status">{{ row.status }}</span>
+            </div>
+            <div class="card-meta">
+              <span>{{ row.clientName }}</span>
+              <span>Issued {{ row.issueDate | date: 'yyyy-MM-dd' }} · Due {{ row.dueDate | date: 'yyyy-MM-dd' }}</span>
+              <strong>{{ row.grossTotal | money }}</strong>
+            </div>
+          </a>
+        }
+      </div>
     </div>
-
-    <form class="filters" [formGroup]="filters" (ngSubmit)="load()">
-      <mat-form-field appearance="outline">
-        <mat-label>Status</mat-label>
-        <mat-select formControlName="status">
-          <mat-option value="">All</mat-option>
-          <mat-option value="DRAFT">DRAFT</mat-option>
-          <mat-option value="SENT">SENT</mat-option>
-          <mat-option value="PAID">PAID</mat-option>
-          <mat-option value="CANCELLED">CANCELLED</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Client</mat-label>
-        <mat-select formControlName="clientId">
-          <mat-option value="">All</mat-option>
-          @for (c of clients; track c.id) {
-            <mat-option [value]="c.id">{{ c.name }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>From</mat-label>
-        <input matInput type="date" formControlName="from" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>To</mat-label>
-        <input matInput type="date" formControlName="to" />
-      </mat-form-field>
-      <button mat-stroked-button type="submit">Apply</button>
-    </form>
-
-    <table mat-table [dataSource]="invoices" class="full">
-      <ng-container matColumnDef="number">
-        <th mat-header-cell *matHeaderCellDef>Number</th>
-        <td mat-cell *matCellDef="let row">
-          <a [routerLink]="['/invoices', row.id]">{{ row.number }}</a>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="clientName">
-        <th mat-header-cell *matHeaderCellDef>Client</th>
-        <td mat-cell *matCellDef="let row">{{ row.clientName }}</td>
-      </ng-container>
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>Status</th>
-        <td mat-cell *matCellDef="let row"><span class="status" [attr.data-s]="row.status">{{ row.status }}</span></td>
-      </ng-container>
-      <ng-container matColumnDef="issueDate">
-        <th mat-header-cell *matHeaderCellDef>Issued</th>
-        <td mat-cell *matCellDef="let row">{{ row.issueDate | date: 'yyyy-MM-dd' }}</td>
-      </ng-container>
-      <ng-container matColumnDef="dueDate">
-        <th mat-header-cell *matHeaderCellDef>Due</th>
-        <td mat-cell *matCellDef="let row">{{ row.dueDate | date: 'yyyy-MM-dd' }}</td>
-      </ng-container>
-      <ng-container matColumnDef="grossTotal">
-        <th mat-header-cell *matHeaderCellDef>Gross</th>
-        <td mat-cell *matCellDef="let row">{{ row.grossTotal | currency: 'PLN' }}</td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="cols"></tr>
-      <tr mat-row *matRowDef="let row; columns: cols"></tr>
-    </table>
   `,
   styles: `
-    .header { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
-    h1 { margin: 0 0 0.35rem; }
-    .muted { margin: 0; color: color-mix(in srgb, var(--mat-sys-on-surface) 65%, transparent); }
-    .filters { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-bottom: 1rem; }
-    .full { width: 100%; }
-    a { color: inherit; }
-    .status { font-size: 0.8rem; font-weight: 600; }
-    .status[data-s='DRAFT'] { color: #5f6368; }
-    .status[data-s='SENT'] { color: #0b57d0; }
-    .status[data-s='PAID'] { color: #146c2e; }
-    .status[data-s='CANCELLED'] { color: #b3261e; }
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+      gap: var(--space-2) var(--space-3);
+      align-items: start;
+      margin-bottom: var(--space-4);
+    }
+    .apply {
+      margin-top: 0.35rem;
+      min-height: var(--touch);
+    }
+    .invoice-card {
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+    .invoice-card:active {
+      transform: scale(0.99);
+    }
+    .invoice-card strong {
+      color: var(--ink);
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+    }
+    @media (max-width: 1000px) {
+      .filters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .apply { grid-column: 1 / -1; width: 100%; }
+    }
+    @media (max-width: 600px) {
+      .filters { grid-template-columns: 1fr; }
+    }
   `,
 })
 export class InvoicesComponent implements OnInit {
@@ -115,12 +158,11 @@ export class InvoicesComponent implements OnInit {
 
   invoices: Invoice[] = [];
   clients: Client[] = [];
-  cols = ['number', 'clientName', 'status', 'issueDate', 'dueDate', 'grossTotal'];
-  filters = this.fb.nonNullable.group({
-    status: ['' as InvoiceStatus | ''],
-    clientId: [''],
-    from: [''],
-    to: [''],
+  filters = this.fb.group({
+    status: this.fb.nonNullable.control('' as InvoiceStatus | ''),
+    clientId: this.fb.nonNullable.control(''),
+    from: this.fb.control<Date | null>(null),
+    to: this.fb.control<Date | null>(null),
   });
 
   ngOnInit(): void {
@@ -134,9 +176,16 @@ export class InvoicesComponent implements OnInit {
       .getInvoices({
         status: v.status,
         clientId: v.clientId || undefined,
-        from: v.from || undefined,
-        to: v.to || undefined,
+        from: v.from ? this.toIsoDate(v.from) : undefined,
+        to: v.to ? this.toIsoDate(v.to) : undefined,
       })
       .subscribe((rows) => (this.invoices = rows));
+  }
+
+  private toIsoDate(value: Date): string {
+    const y = value.getFullYear();
+    const m = String(value.getMonth() + 1).padStart(2, '0');
+    const d = String(value.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
   }
 }

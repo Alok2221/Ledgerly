@@ -1,4 +1,4 @@
-﻿package com.ledgerly.service;
+package com.ledgerly.service;
 
 import com.ledgerly.domain.Client;
 import com.ledgerly.domain.User;
@@ -69,6 +69,7 @@ public class ClientService {
         client.setName(request.name().trim());
         client.setNip(blankToNull(request.nip()));
         client.setEmail(blankToNull(request.email()));
+        client.setPhone(blankToNull(request.phone()));
         client.setAddress(blankToNull(request.address()));
     }
 
@@ -82,6 +83,7 @@ public class ClientService {
                 client.getName(),
                 client.getNip(),
                 client.getEmail(),
+                client.getPhone(),
                 client.getAddress(),
                 client.getCreatedAt(),
                 client.getUpdatedAt());

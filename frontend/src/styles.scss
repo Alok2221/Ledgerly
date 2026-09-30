@@ -1,39 +1,503 @@
-
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
+
+:root,
+[data-theme='light'] {
+  --ink: #222a27;
+  --ink-soft: #34403b;
+  --on-ink: #f4f6f4;
+  --paper: #eef1ef;
+  --paper-deep: #e2e7e4;
+  --panel: #f8f9f8;
+  --line: #c8cfca;
+  --brass: #8f7350;
+  --brass-hover: #7a6244;
+  --ok: #3d6b55;
+  --warn: #9a4f45;
+  --muted: #55615b;
+  --field-label: #44514b;
+  --field-input: #1a211e;
+  --field-placeholder: #5f6b65;
+  --shadow: 0 14px 32px rgba(42, 51, 48, 0.06);
+  --shell-bg: rgba(248, 249, 248, 0.94);
+  --nav-hover: rgba(42, 51, 48, 0.05);
+  --nav-active: rgba(42, 51, 48, 0.09);
+  --focus-ring: color-mix(in srgb, var(--brass) 45%, var(--line));
+  --body-gradient: linear-gradient(180deg, rgba(248, 249, 248, 0.78), rgba(238, 241, 239, 0.94));
+  --body-lines: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 27px,
+    rgba(42, 51, 48, 0.028) 28px
+  );
+  --table-head: #eef1ef;
+  --chip-draft-bg: #e8ebe9;
+  --chip-draft-fg: #4d5752;
+  --chip-sent-bg: #dde8e2;
+  --chip-sent-fg: #35574a;
+  --chip-paid-bg: #dce8d9;
+  --chip-paid-fg: #3a5c3a;
+  --chip-cancelled-bg: #eee0dd;
+  --chip-cancelled-fg: #7d433c;
+  --stat-bg: linear-gradient(160deg, rgba(255, 255, 255, 0.72), rgba(248, 249, 248, 0.96));
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Manrope", "Segoe UI", sans-serif;
+  --radius: 14px;
+  --space-1: 0.35rem;
+  --space-2: 0.6rem;
+  --space-3: 0.9rem;
+  --space-4: 1.15rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 2.75rem;
+  --page-x: clamp(0.9rem, 3.2vw, 1.75rem);
+  --page-y: clamp(1.1rem, 3vw, 2rem);
+  --content-max: 68rem;
+  --touch: 2.75rem;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+[data-theme='dark'] {
+  --ink: #e6ebe8;
+  --ink-soft: #c8d2cd;
+  --on-ink: #141a18;
+  --paper: #121816;
+  --paper-deep: #1a221f;
+  --panel: #171e1b;
+  --line: #2f3a35;
+  --brass: #b89a6a;
+  --brass-hover: #c9ad7e;
+  --ok: #7aab90;
+  --warn: #d49288;
+  --muted: #9aa59f;
+  --field-label: #b4c0ba;
+  --field-input: #eef3f0;
+  --field-placeholder: #9aa59f;
+  --shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+  --shell-bg: rgba(18, 24, 22, 0.92);
+  --nav-hover: rgba(230, 235, 232, 0.06);
+  --nav-active: rgba(230, 235, 232, 0.11);
+  --focus-ring: color-mix(in srgb, var(--brass) 50%, var(--line));
+  --body-gradient: linear-gradient(180deg, rgba(23, 30, 27, 0.92), rgba(18, 24, 22, 0.98));
+  --body-lines: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 27px,
+    rgba(230, 235, 232, 0.028) 28px
+  );
+  --table-head: #1a221f;
+  --chip-draft-bg: #24302c;
+  --chip-draft-fg: #b7c0bb;
+  --chip-sent-bg: #22352e;
+  --chip-sent-fg: #9fc4b2;
+  --chip-paid-bg: #243528;
+  --chip-paid-fg: #a5c7a5;
+  --chip-cancelled-bg: #3a2a27;
+  --chip-cancelled-fg: #e0b0a8;
+  --stat-bg: linear-gradient(160deg, rgba(255, 255, 255, 0.03), rgba(23, 30, 27, 0.95));
+}
 
 html {
   @include mat.theme((
     color: (
       primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
+      tertiary: mat.$cyan-palette,
     ),
-    typography: Roboto,
-    density: 0,
+    typography: Manrope,
+    density: -1,
   ));
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html,
+body {
+  min-height: 100%;
+  min-height: 100dvh;
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
   margin: 0;
+  color-scheme: light dark;
+  color: var(--ink);
+  background:
+    var(--body-gradient),
+    var(--body-lines),
+    var(--paper);
+  font-family: var(--font-body);
+  font-size: clamp(0.94rem, 0.9rem + 0.2vw, 1rem);
+  line-height: 1.5;
+  overflow-x: hidden;
 }
-/* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+.page {
+  width: min(100%, var(--content-max));
+  margin-inline: auto;
+  animation: rise 0.35s ease both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.page-head > div {
+  min-width: min(100%, 16rem);
+  flex: 1 1 14rem;
+}
+
+.page-head h1 {
+  margin: 0.2rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 1.2rem + 2vw, 2.35rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.page-kicker,
+.muted {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch);
+  gap: 0.35rem;
+  margin: 0 0 0.15rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.back-link:hover {
+  color: var(--brass);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: clamp(0.95rem, 2.5vw, 1.35rem);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: 0 0 var(--space-6);
+}
+
+.stat {
+  padding: clamp(0.95rem, 2vw, 1.2rem);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--stat-bg);
+  min-width: 0;
+}
+
+.stat .label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.stat .value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1rem + 1.4vw, 1.75rem);
+  font-weight: 650;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.btn-primary {
+  background: var(--ink) !important;
+  color: var(--on-ink) !important;
+}
+
+.btn-primary:hover {
+  background: var(--ink-soft) !important;
+}
+
+.btn-accent {
+  background: var(--brass) !important;
+  color: #fffaf0 !important;
+}
+
+.btn-accent:hover {
+  background: var(--brass-hover) !important;
+}
+
+.status-chip {
+  display: inline-block;
+  min-width: 4.5rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.status-chip.DRAFT { background: var(--chip-draft-bg); color: var(--chip-draft-fg); }
+.status-chip.SENT { background: var(--chip-sent-bg); color: var(--chip-sent-fg); }
+.status-chip.PAID { background: var(--chip-paid-bg); color: var(--chip-paid-fg); }
+.status-chip.CANCELLED { background: var(--chip-cancelled-bg); color: var(--chip-cancelled-fg); }
+
+.table-wrap {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+table.ledger-table {
+  width: 100%;
+  min-width: 36rem;
+  border-collapse: collapse;
+}
+
+table.ledger-table th,
+table.ledger-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+table.ledger-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--table-head);
+}
+
+table.ledger-table tr:last-child td {
+  border-bottom: 0;
+}
+
+table.ledger-table a {
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+table.ledger-table a:hover {
+  color: var(--brass);
+}
+
+.mobile-list {
+  display: none;
+  gap: var(--space-3);
+}
+
+.mobile-card {
+  display: grid;
+  gap: 0.55rem;
+  padding: 1rem 1.05rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.mobile-card .card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.mobile-card .card-title {
+  font-weight: 700;
+  font-size: 1.02rem;
+  overflow-wrap: anywhere;
+}
+
+.mobile-card .card-meta {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.mobile-card .card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+.form-actions > * {
+  min-height: var(--touch);
+}
+
+.full-field,
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-form-field .mdc-floating-label,
+.mat-mdc-form-field .mdc-floating-label--float-above {
+  color: var(--field-label) !important;
+}
+
+.mat-mdc-form-field .mat-mdc-input-element,
+.mat-mdc-form-field .mat-mdc-select-value-text,
+.mat-mdc-form-field textarea.mat-mdc-input-element {
+  color: var(--field-input) !important;
+  -webkit-text-fill-color: var(--field-input);
+  font-weight: 500;
+}
+
+.mat-mdc-form-field .mat-mdc-input-element::placeholder,
+.mat-mdc-form-field textarea.mat-mdc-input-element::placeholder {
+  color: var(--field-placeholder) !important;
+  -webkit-text-fill-color: var(--field-placeholder);
+  opacity: 1;
+}
+
+.mat-mdc-form-field .mat-mdc-select-placeholder {
+  color: var(--field-placeholder) !important;
+}
+
+.mat-mdc-form-field .mat-mdc-select-arrow {
+  color: var(--field-label) !important;
+}
+
+[data-theme='light'] .mat-mdc-form-field .mdc-floating-label,
+[data-theme='light'] .mat-mdc-form-field .mdc-floating-label--float-above {
+  font-weight: 600;
+}
+
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label,
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label--float-above {
+  color: var(--brass) !important;
+}
+
+.mdc-text-field--outlined.mdc-text-field--focused .mdc-notched-outline__leading,
+.mdc-text-field--outlined.mdc-text-field--focused .mdc-notched-outline__notch,
+.mdc-text-field--outlined.mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: var(--focus-ring) !important;
+}
+
+.mat-datepicker-toggle {
+  color: var(--field-label);
+}
+
+.mat-mdc-icon-button.mat-datepicker-toggle-default-icon,
+.mat-datepicker-toggle .mat-mdc-button-persistent-ripple,
+button.mat-datepicker-toggle {
+  color: var(--field-label);
+}
+
+.mat-calendar-body-selected {
+  background-color: var(--ink) !important;
+  color: var(--on-ink) !important;
+}
+
+.mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+  border-color: var(--brass) !important;
+}
+
+@media (max-width: 900px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-list {
+    display: grid;
+  }
+
+  .page-head {
+    align-items: stretch;
+  }
+
+  .page-head > a,
+  .page-head > button {
+    width: 100%;
+  }
+}
+
+@media (min-width: 901px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    animation: none;
+  }
+}
