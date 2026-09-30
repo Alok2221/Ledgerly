@@ -4,11 +4,21 @@ Web app for freelancers / small businesses: **clients → invoices → payment s
 
 Stack: Java 21, Spring Boot 4, Angular, PostgreSQL, Docker Compose.
 
+## Showcase
+
+Dashboard in dark mode - period totals, upcoming due invoices, currency switch (PLN / USD / EUR) and theme toggle.
+
+<p align="center">
+  <img src="docs/images/dashboard-dark.png" alt="Ledgerly dashboard in dark mode" width="920" />
+</p>
+
 ## What this project demonstrates
 
-- REST API with JWT — each owner sees only their own data (`userId`)
+- REST API with JWT - each owner sees only their own data (`userId`)
 - automatic invoice numbering (`FV/2026/001`) + net / VAT / gross totals
 - status workflow `DRAFT → SENT → PAID` (and `CANCELLED`)
+- display currency conversion (PLN / USD / EUR) via ECB rates
+- light / dark theme
 - one-command local run: `docker compose up --build`
 
 ## Requirements
@@ -27,6 +37,8 @@ docker compose up --build
 - PostgreSQL: `localhost:5432` (`ledgerly` / `ledgerly`)
 
 Register in the UI, add a client, create an invoice, move it to `SENT` / `PAID`, and check the dashboard.
+
+Demo account (seeded): `demo@ledgerly.dev` / `Demo1234!`
 
 ## Local development
 
@@ -66,14 +78,15 @@ UI: http://localhost:4200 (`environment.apiUrl` points at the API)
 | CRUD | `/api/invoices` | invoices + filters |
 | PUT | `/api/invoices/{id}/status` | change status |
 | GET | `/api/dashboard/summary` | totals + upcoming due dates |
+| GET | `/api/rates` | PLN → USD / EUR display rates |
 
 ## Model
 
-`User 1—N Client`, `User 1—N Invoice`, `Invoice 1—N InvoiceItem`
+`User 1-N Client`, `User 1-N Invoice`, `Invoice 1-N InvoiceItem`
 
 ## Out of scope for MVP
 
-KSeF, Stripe, multi-currency, system admin roles, PDF / CSV (nice-to-have later).
+KSeF, Stripe, multi-currency invoicing (display conversion only), system admin roles, PDF / CSV (nice-to-have later).
 
 ## Branches and commits
 
