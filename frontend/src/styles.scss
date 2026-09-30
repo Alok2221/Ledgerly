@@ -2,18 +2,21 @@
 
 :root,
 [data-theme='light'] {
-  --ink: #2a3330;
-  --ink-soft: #3d4a45;
+  --ink: #222a27;
+  --ink-soft: #34403b;
   --on-ink: #f4f6f4;
   --paper: #eef1ef;
   --paper-deep: #e2e7e4;
   --panel: #f8f9f8;
-  --line: #d0d6d2;
+  --line: #c8cfca;
   --brass: #8f7350;
   --brass-hover: #7a6244;
   --ok: #3d6b55;
   --warn: #9a4f45;
-  --muted: #66726c;
+  --muted: #55615b;
+  --field-label: #44514b;
+  --field-input: #1a211e;
+  --field-placeholder: #5f6b65;
   --shadow: 0 14px 32px rgba(42, 51, 48, 0.06);
   --shell-bg: rgba(248, 249, 248, 0.94);
   --nav-hover: rgba(42, 51, 48, 0.05);
@@ -69,6 +72,9 @@
   --ok: #7aab90;
   --warn: #d49288;
   --muted: #9aa59f;
+  --field-label: #b4c0ba;
+  --field-input: #eef3f0;
+  --field-placeholder: #9aa59f;
   --shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
   --shell-bg: rgba(18, 24, 22, 0.92);
   --nav-hover: rgba(230, 235, 232, 0.06);
@@ -398,6 +404,39 @@ table.ledger-table a:hover {
   width: 100%;
 }
 
+.mat-mdc-form-field .mdc-floating-label,
+.mat-mdc-form-field .mdc-floating-label--float-above {
+  color: var(--field-label) !important;
+}
+
+.mat-mdc-form-field .mat-mdc-input-element,
+.mat-mdc-form-field .mat-mdc-select-value-text,
+.mat-mdc-form-field textarea.mat-mdc-input-element {
+  color: var(--field-input) !important;
+  -webkit-text-fill-color: var(--field-input);
+  font-weight: 500;
+}
+
+.mat-mdc-form-field .mat-mdc-input-element::placeholder,
+.mat-mdc-form-field textarea.mat-mdc-input-element::placeholder {
+  color: var(--field-placeholder) !important;
+  -webkit-text-fill-color: var(--field-placeholder);
+  opacity: 1;
+}
+
+.mat-mdc-form-field .mat-mdc-select-placeholder {
+  color: var(--field-placeholder) !important;
+}
+
+.mat-mdc-form-field .mat-mdc-select-arrow {
+  color: var(--field-label) !important;
+}
+
+[data-theme='light'] .mat-mdc-form-field .mdc-floating-label,
+[data-theme='light'] .mat-mdc-form-field .mdc-floating-label--float-above {
+  font-weight: 600;
+}
+
 .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label,
 .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label--float-above {
   color: var(--brass) !important;
@@ -410,13 +449,13 @@ table.ledger-table a:hover {
 }
 
 .mat-datepicker-toggle {
-  color: var(--muted);
+  color: var(--field-label);
 }
 
 .mat-mdc-icon-button.mat-datepicker-toggle-default-icon,
 .mat-datepicker-toggle .mat-mdc-button-persistent-ripple,
 button.mat-datepicker-toggle {
-  color: var(--muted);
+  color: var(--field-label);
 }
 
 .mat-calendar-body-selected {
